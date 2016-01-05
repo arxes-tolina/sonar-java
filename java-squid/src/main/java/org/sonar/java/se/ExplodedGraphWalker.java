@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.java.cfg.CFG;
 import org.sonar.java.cfg.LiveVariables;
 import org.sonar.java.model.JavaTree;
+import org.sonar.java.se.ProgramState.Pop;
 import org.sonar.java.se.checks.ConditionAlwaysTrueOrFalseCheck;
 import org.sonar.java.se.checks.LocksNotUnlockedCheck;
 import org.sonar.java.se.checks.NullDereferenceCheck;
@@ -408,9 +409,12 @@ public class ExplodedGraphWalker extends BaseTreeVisitor {
   private void executeMethodInvocation(MethodInvocationTree mit) {
     setSymbolicValueOnFields(mit);
     // unstack arguments and method identifier
-    programState = programState.unstackValue(mit.arguments().size() + 1).state;
+    final int numberOfArguments = mit.arguments().size();
+    final Pop pop = programState.unstackValue(numberOfArguments + 1);
+    programState = pop.state;
     logState(mit);
-    programState = programState.stackValue(constraintManager.createSymbolicValue(mit));
+    final SymbolicValue methodResult = constraintManager.createMethodSymbolicValue(mit, pop.values);
+    programState = programState.stackValue(methodResult);
   }
 
   private void executeVariable(VariableTree variableTree, @Nullable Tree terminator) {

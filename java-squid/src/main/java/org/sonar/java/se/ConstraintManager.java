@@ -21,9 +21,11 @@ package org.sonar.java.se;
 
 import com.google.common.base.Preconditions;
 import org.sonar.plugins.java.api.semantic.Type;
+import org.sonar.plugins.java.api.tree.ExpressionTree;
 import org.sonar.plugins.java.api.tree.IdentifierTree;
 import org.sonar.plugins.java.api.tree.LiteralTree;
 import org.sonar.plugins.java.api.tree.MemberSelectExpressionTree;
+import org.sonar.plugins.java.api.tree.MethodInvocationTree;
 import org.sonar.plugins.java.api.tree.Tree;
 
 import java.util.List;
@@ -76,6 +78,29 @@ public class ConstraintManager {
     }
     counter++;
     return result;
+  }
+
+  public SymbolicValue createMethodSymbolicValue(MethodInvocationTree syntaxNode, List<SymbolicValue> values) {
+    SymbolicValue result;
+    if (isEqualsMethod(syntaxNode)) {
+      result = new SymbolicValue.MethodEqualsToSymbolicValue(counter);
+      result.computedFrom(values);
+    } else {
+      result = createDefaultSymbolicValue(syntaxNode);
+    }
+    counter++;
+    return result;
+  }
+
+  private static boolean isEqualsMethod(MethodInvocationTree syntaxNode) {
+    if (syntaxNode.arguments().size() == 1) {
+      final ExpressionTree methodSelect = syntaxNode.methodSelect();
+      if (methodSelect.is(Tree.Kind.MEMBER_SELECT)) {
+        MemberSelectExpressionTree expression = (MemberSelectExpressionTree) methodSelect;
+        return "equals".equals(expression.identifier().name());
+      }
+    }
+    return false;
   }
 
   private SymbolicValue createIdentifierSymbolicValue(IdentifierTree identifier) {

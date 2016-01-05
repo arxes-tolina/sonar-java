@@ -1,5 +1,7 @@
 package javax.annotation;
 
+import java.util.List;
+
 import static java.lang.Boolean.TRUE;
 
 @interface CheckForNull {}
@@ -1386,6 +1388,61 @@ class SuperClass {
 
         }
       }
+    }
+  }
+  
+  public void useEquals(Object a, Object b) {
+    if (a.equals(b)) {
+      log("Are equal!");
+      if (!a.equals(b)) { // Noncompliant {{Change this condition so that it does not always evaluate to "false"}}
+        log("Not equal!");
+      }
+    }
+  }
+  
+  public void negateEquals(Object a, Object b) {
+    if (!a.equals(b)) {
+      log("Not equal!");
+      if (a.equals(b)) { // Noncompliant {{Change this condition so that it does not always evaluate to "false"}}
+        log("Are equal!");
+      }
+    }
+  }
+
+  private void disableRulesDebt(List<RuleDto> ruleDtos, Integer subCharacteristicId, Date updateDate, DbSession session) {
+    for (RuleDto ruleDto : ruleDtos) {
+      if (subCharacteristicId.equals(ruleDto.getSubCharacteristicId())) {
+        ruleDto.setSubCharacteristicId(RuleDto.DISABLED_CHARACTERISTIC_ID);
+        ruleDto.setRemediationFunction(null);
+        ruleDto.setRemediationCoefficient(null);
+        ruleDto.setRemediationOffset(null);
+        ruleDto.setUpdatedAt(updateDate);
+      }
+      if (subCharacteristicId.equals(ruleDto.getDefaultSubCharacteristicId())) {
+        ruleDto.setDefaultSubCharacteristicId(null);
+        ruleDto.setDefaultRemediationFunction(null);
+        ruleDto.setDefaultRemediationCoefficient(null);
+        ruleDto.setDefaultRemediationOffset(null);
+      }
+      dbClient.ruleDao().update(session, ruleDto);
+    }
+  }
+
+  public void equalsAfterEqual(boolean a, boolean b) {
+    // Same as expression in method tests
+    if (a == b || a.equals(b)) { // Compliant "!=" does not imply "equals"
+    }
+  }
+
+  public void equalsAfterEqual(boolean a, boolean b) {
+    if (a.equals(b) || a == b) { // Noncompliant {{Change this condition so that it does not always evaluate to "false"}}
+    }
+  }
+  
+  public void notNullAfterCall(Object a) {
+    a.toString();
+    if (a == null) { // Noncompliant {{Change this condition so that it does not always evaluate to "false"}}
+      log("Error");
     }
   }
 }
