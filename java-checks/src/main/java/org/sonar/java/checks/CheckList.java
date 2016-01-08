@@ -45,6 +45,7 @@ public final class CheckList {
 
   public static List<Class<? extends JavaCheck>> getJavaChecks() {
     return ImmutableList.<Class<? extends JavaCheck>>builder()
+      .add(VarArgCheck.class)
       .add(TabCharacter_S00105_Check.class)
       .add(TooLongLine_S00103_Check.class)
       .add(MissingNewLineAtEndOfFile_S00113_Check.class)
