@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.xml.maven;
+package org.sonar.java.xml.maven;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,6 @@ public class MavenParser {
       unmarshaller.setListener(streamListener);
 
       unmarshaller.setAdapter(new LocatedAttributeAdapter(reader));
-
       return unmarshaller.unmarshal(reader, MavenProject.class).getValue();
     } catch (JAXBException | XMLStreamException | IOException e) {
       LOG.error("Unable to parse pom file " + file.getPath(), e);

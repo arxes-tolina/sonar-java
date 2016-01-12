@@ -17,18 +17,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.xml;
+package org.sonar.java.xml.maven;
 
 import com.google.common.annotations.Beta;
+import org.sonar.java.xml.XmlCheck;
+import org.sonar.java.xml.XmlFileScannerContext;
+import org.sonar.maven.model.LocatedTree;
+import org.sonar.maven.model.maven2.MavenProject;
 
-import java.io.File;
+import java.util.List;
 
 @Beta
-public interface XmlFileScannerContext {
+public interface MavenFileScannerContext extends XmlFileScannerContext {
 
-  File getXmlFile();
+  MavenProject getMavenProject();
 
-  void reportIssueOnFile(XmlCheck check, String message);
+  void reportIssue(XmlCheck check, LocatedTree tree, String message);
 
-  void reportIssue(XmlCheck check, int line, String message);
+  void reportIssue(XmlCheck check, int line, String message, List<Location> secondary);
+
+  class Location {
+    public final String msg;
+    public final LocatedTree tree;
+
+    public Location(String msg, LocatedTree tree) {
+      this.msg = msg;
+      this.tree = tree;
+    }
+  }
+
 }

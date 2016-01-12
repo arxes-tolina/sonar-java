@@ -17,16 +17,18 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.xml.maven;
+package org.sonar.java.xml.maven;
 
 import com.google.common.annotations.VisibleForTesting;
 import org.sonar.java.AnalyzerMessage;
 import org.sonar.java.AnalyzerMessage.TextSpan;
 import org.sonar.java.SonarComponents;
+import org.sonar.java.xml.XmlCheck;
+import org.sonar.java.xml.XmlFileScannerContextImpl;
 import org.sonar.maven.model.LocatedTree;
 import org.sonar.maven.model.XmlLocation;
 import org.sonar.maven.model.maven2.MavenProject;
-import org.sonar.xml.XmlFileScannerContextImpl;
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.util.List;
@@ -35,8 +37,8 @@ public class MavenFileScannerContextImpl extends XmlFileScannerContextImpl imple
 
   private final MavenProject project;
 
-  public MavenFileScannerContextImpl(MavenProject project, File file, SonarComponents sonarComponents) {
-    super(file, sonarComponents);
+  public MavenFileScannerContextImpl(MavenProject project, Document document, File file, SonarComponents sonarComponents) {
+    super(document, file, sonarComponents);
     this.project = project;
   }
 
@@ -46,12 +48,12 @@ public class MavenFileScannerContextImpl extends XmlFileScannerContextImpl imple
   }
 
   @Override
-  public void reportIssue(MavenCheck check, LocatedTree tree, String message) {
+  public void reportIssue(XmlCheck check, LocatedTree tree, String message) {
     getSonarComponents().addIssue(getFile(), check, tree.startLocation().line(), message, null);
   }
 
   @Override
-  public void reportIssue(MavenCheck check, int line, String message, List<Location> secondary) {
+  public void reportIssue(XmlCheck check, int line, String message, List<Location> secondary) {
     File file = getFile();
     AnalyzerMessage analyzerMessage = new AnalyzerMessage(check, file, line, message, 0);
     for (Location location : secondary) {
@@ -62,7 +64,7 @@ public class MavenFileScannerContextImpl extends XmlFileScannerContextImpl imple
   }
 
   @VisibleForTesting
-  static AnalyzerMessage getSecondaryAnalyzerMessage(MavenCheck check, File file, Location location) {
+  static AnalyzerMessage getSecondaryAnalyzerMessage(XmlCheck check, File file, Location location) {
     XmlLocation startLocation = location.tree.startLocation();
     int startLine = startLocation.line();
     int startColumn = startLocation.column();

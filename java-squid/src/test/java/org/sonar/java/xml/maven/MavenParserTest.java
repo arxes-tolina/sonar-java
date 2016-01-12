@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.xml.maven;
+package org.sonar.java.xml.maven;
 
 import org.junit.Test;
 import org.sonar.maven.model.LocatedAttribute;
@@ -36,9 +36,9 @@ import java.util.List;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class MavenParserTest {
-  private static final File SIMPLE_POM_FILE = new File("src/test/files/maven/simple-project/pom.xml");
-  private static final File COMPLEX_ELEMENT_POM_FILE = new File("src/test/files/maven/complex-element/pom.xml");
-  private static final File PARSE_ISSUE_POM_FILE = new File("src/test/files/maven/parse-issue/pom.xml");
+  private static final File SIMPLE_POM_FILE = new File("src/test/files/xml/maven/simple-project/pom.xml");
+  private static final File COMPLEX_ELEMENT_POM_FILE = new File("src/test/files/xml/maven/complex-element/pom.xml");
+  private static final File PARSE_ISSUE_POM_FILE = new File("src/test/files/xml/maven/parse-issue/pom.xml");
 
   @Test
   public void should_parse_simple_pom() throws Exception {

@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.xml.maven;
+package org.sonar.java.xml.maven;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,14 +25,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.java.AnalyzerMessage;
 import org.sonar.java.SonarComponents;
+import org.sonar.java.xml.XmlCheck;
+import org.sonar.java.xml.maven.MavenFileScannerContext.Location;
 import org.sonar.maven.model.LocatedTree;
 import org.sonar.maven.model.LocatedTreeImpl;
 import org.sonar.maven.model.XmlLocation;
 import org.sonar.maven.model.maven2.MavenProject;
-import org.sonar.xml.maven.MavenCheck;
-import org.sonar.xml.maven.MavenFileScannerContext;
-import org.sonar.xml.maven.MavenFileScannerContextImpl;
-import org.sonar.xml.maven.MavenFileScannerContext.Location;
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class MavenFileScannerContextImplTest {
   private static String reportedMessage;
   private MavenFileScannerContext context;
   private SonarComponents sonarComponents;
-  private static final MavenCheck CHECK = new MavenCheck() {
+  private static final XmlCheck CHECK = new XmlCheck() {
   };
   private static final int LINE = 42;
 
@@ -57,7 +56,7 @@ public class MavenFileScannerContextImplTest {
   public void setup() {
     reportedMessage = null;
     sonarComponents = createSonarComponentsMock();
-    context = new MavenFileScannerContextImpl(mock(MavenProject.class), mock(File.class), sonarComponents);
+    context = new MavenFileScannerContextImpl(mock(MavenProject.class), mock(Document.class), mock(File.class), sonarComponents);
   }
 
   @Test

@@ -21,9 +21,9 @@ package org.sonar.java.checks.maven.helpers;
 
 import org.fest.assertions.Fail;
 import org.junit.Test;
+import org.sonar.java.xml.maven.MavenParser;
 import org.sonar.maven.model.maven2.Dependency;
 import org.sonar.maven.model.maven2.MavenProject;
-import org.sonar.xml.maven.MavenParser;
 
 import java.io.File;
 import java.util.List;

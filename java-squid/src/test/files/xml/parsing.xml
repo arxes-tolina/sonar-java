@@ -1,0 +1,16 @@
+<assembly-descriptor>
+  <interceptor-binding>
+    <!-- 
+    my comment 
+    -->
+    <ejb-name>MyExcludedClass</ejb-name>
+    <exclude-default-interceptors>true</exclude-default-interceptors>
+    <exclude-class-interceptors>true</exclude-class-interceptors>
+    <method>
+      <method-name>doTheThing</method-name>
+    </method>
+  </interceptor-binding>
+  <test>
+    <![CDATA[myCDATA]]>
+  </test>
+</assembly-descriptor>

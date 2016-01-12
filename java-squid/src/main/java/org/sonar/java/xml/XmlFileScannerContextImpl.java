@@ -17,18 +17,27 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.xml;
+package org.sonar.java.xml;
 
 import org.sonar.java.SonarComponents;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import java.io.File;
 
 public class XmlFileScannerContextImpl implements XmlFileScannerContext {
 
+  private final Document document;
   private final File file;
   private final SonarComponents sonarComponents;
 
-  public XmlFileScannerContextImpl(File file, SonarComponents sonarComponents) {
+  public XmlFileScannerContextImpl(Document document, File file, SonarComponents sonarComponents) {
+    this.document = document;
     this.file = file;
     this.sonarComponents = sonarComponents;
   }
@@ -36,6 +45,12 @@ public class XmlFileScannerContextImpl implements XmlFileScannerContext {
   @Override
   public File getXmlFile() {
     return file;
+  }
+
+  @Override
+  public NodeList evaluateXPathExpression(String expression) throws XPathExpressionException {
+    XPath xPath = XPathFactory.newInstance().newXPath();
+    return (NodeList) xPath.compile(expression).evaluate(document, XPathConstants.NODESET);
   }
 
   @Override

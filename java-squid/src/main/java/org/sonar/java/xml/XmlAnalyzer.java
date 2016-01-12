@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.xml;
+package org.sonar.java.xml;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -25,13 +25,14 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.java.SonarComponents;
+import org.sonar.java.xml.maven.MavenFileScanner;
+import org.sonar.java.xml.maven.MavenFileScannerContext;
+import org.sonar.java.xml.maven.MavenFileScannerContextImpl;
+import org.sonar.java.xml.maven.MavenParser;
 import org.sonar.maven.model.maven2.MavenProject;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.CodeVisitor;
-import org.sonar.xml.maven.MavenFileScanner;
-import org.sonar.xml.maven.MavenFileScannerContext;
-import org.sonar.xml.maven.MavenFileScannerContextImpl;
-import org.sonar.xml.maven.MavenParser;
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.util.List;
@@ -88,22 +89,23 @@ public class XmlAnalyzer {
   }
 
   private void simpleScan(File file) {
-    simpleScanAsXmlFile(file);
+    Document document = XmlParser.parseXML(file);
+    simpleScanAsXmlFile(file, document);
     if ("pom.xml".equals(file.getName())) {
-      simpleScanAsPomFile(file);
+      simpleScanAsPomFile(file, document);
     }
   }
 
-  private void simpleScanAsXmlFile(File file) {
-    XmlFileScannerContext scannerContext = new XmlFileScannerContextImpl(file, sonarComponents);
+  private void simpleScanAsXmlFile(File file, Document document) {
+    XmlFileScannerContext scannerContext = new XmlFileScannerContextImpl(document, file, sonarComponents);
     for (XmlFileScanner xmlFileScanner : xmlFileScanners) {
       xmlFileScanner.scanFile(scannerContext);
     }
   }
 
-  private void simpleScanAsPomFile(File file) {
+  private void simpleScanAsPomFile(File file, Document document) {
     MavenProject project = MavenParser.parseXML(file);
-    MavenFileScannerContext mavenContext = new MavenFileScannerContextImpl(project, file, sonarComponents);
+    MavenFileScannerContext mavenContext = new MavenFileScannerContextImpl(project, document, file, sonarComponents);
     if (project != null) {
       for (MavenFileScanner mavenFileScanner : mavenFileScanners) {
         mavenFileScanner.scanFile(mavenContext);

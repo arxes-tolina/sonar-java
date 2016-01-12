@@ -29,6 +29,7 @@ import org.sonar.java.se.checks.ConditionAlwaysTrueOrFalseCheck;
 import org.sonar.java.se.checks.LocksNotUnlockedCheck;
 import org.sonar.java.se.checks.NullDereferenceCheck;
 import org.sonar.java.se.checks.UnclosedResourcesCheck;
+import org.sonar.java.xml.XmlCheck;
 import org.sonar.plugins.java.api.JavaCheck;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public final class CheckList {
   }
 
   public static List<Class> getChecks() {
-    return ImmutableList.<Class>builder().addAll(getJavaChecks()).addAll(getJavaTestChecks()).addAll(getMavenChecks()).build();
+    return ImmutableList.<Class>builder().addAll(getJavaChecks()).addAll(getJavaTestChecks()).addAll(getXmlChecks()).build();
   }
 
   public static List<Class<? extends JavaCheck>> getJavaChecks() {
@@ -393,7 +394,13 @@ public final class CheckList {
       .build();
   }
 
-  public static List<Class<? extends JavaCheck>> getMavenChecks() {
+  public static List<Class<? extends JavaCheck>> getXmlChecks() {
+    return ImmutableList.<Class<? extends JavaCheck>>builder()
+      .addAll(getMavenChecks())
+      .build();
+  }
+
+  private static List<Class<? extends JavaCheck>> getMavenChecks() {
     return ImmutableList.<Class<? extends JavaCheck>>builder()
       .add(PomElementOrderCheck.class)
       .add(DependencyWithSystemScopeCheck.class)
@@ -401,9 +408,5 @@ public final class CheckList {
       .add(ArtifactIdNamingConventionCheck.class)
       .add(DisallowedDependenciesCheck.class)
       .build();
-  }
-
-  public static List<Class<? extends JavaCheck>> getXmlChecks() {
-    return ImmutableList.<Class<? extends JavaCheck>>of();
   }
 }

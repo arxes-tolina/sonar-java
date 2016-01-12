@@ -17,12 +17,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.xml.maven;
+package org.sonar.java.xml;
 
-import org.sonar.xml.XmlCheck;
+import com.google.common.annotations.Beta;
 
-/**
- * Marker interface for the Maven checks.
- */
-public interface MavenCheck extends XmlCheck {
+@Beta
+public interface XmlFileScanner extends XmlCheck {
+
+  void scanFile(XmlFileScannerContext context);
+
 }

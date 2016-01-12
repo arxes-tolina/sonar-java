@@ -22,10 +22,10 @@ package org.sonar.java.checks.verifier;
 import com.google.common.collect.Lists;
 import org.fest.assertions.Fail;
 import org.junit.Test;
+import org.sonar.java.xml.maven.MavenFileScanner;
+import org.sonar.java.xml.maven.MavenFileScannerContext;
 import org.sonar.maven.model.maven2.Dependency;
 import org.sonar.maven.model.maven2.MavenProject;
-import org.sonar.xml.maven.MavenFileScanner;
-import org.sonar.xml.maven.MavenFileScannerContext;
 
 import static org.fest.assertions.Assertions.assertThat;
 

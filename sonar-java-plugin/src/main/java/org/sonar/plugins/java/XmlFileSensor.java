@@ -26,7 +26,7 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.resources.Project;
 import org.sonar.java.SonarComponents;
 import org.sonar.java.checks.CheckList;
-import org.sonar.xml.XmlAnalyzer;
+import org.sonar.java.xml.XmlAnalyzer;
 
 import java.io.File;
 

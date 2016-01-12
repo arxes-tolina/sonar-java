@@ -17,8 +17,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-@ParametersAreNonnullByDefault
-package org.sonar.xml;
+package org.sonar.java.xml;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.google.common.annotations.Beta;
+import org.w3c.dom.NodeList;
 
+import javax.xml.xpath.XPathExpressionException;
+
+import java.io.File;
+
+@Beta
+public interface XmlFileScannerContext {
+
+  File getXmlFile();
+
+  NodeList evaluateXPathExpression(String expression) throws XPathExpressionException;
+
+  void reportIssueOnFile(XmlCheck check, String message);
+
+  void reportIssue(XmlCheck check, int line, String message);
+}
