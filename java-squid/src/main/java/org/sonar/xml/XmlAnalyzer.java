@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.maven;
+package org.sonar.xml;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -28,37 +28,47 @@ import org.sonar.java.SonarComponents;
 import org.sonar.maven.model.maven2.MavenProject;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.CodeVisitor;
+import org.sonar.xml.maven.MavenFileScanner;
+import org.sonar.xml.maven.MavenFileScannerContext;
+import org.sonar.xml.maven.MavenFileScannerContextImpl;
+import org.sonar.xml.maven.MavenParser;
 
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class MavenAnalyzer {
+public class XmlAnalyzer {
 
-  private static final Logger LOG = LoggerFactory.getLogger(MavenAnalyzer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(XmlAnalyzer.class);
   private final SonarComponents sonarComponents;
-  private final List<MavenFileScanner> scanners;
+  private final List<XmlFileScanner> xmlFileScanners;
+  private final List<MavenFileScanner> mavenFileScanners;
 
-  public MavenAnalyzer(SonarComponents sonarComponents, CodeVisitor... visitors) {
-    ImmutableList.Builder<MavenFileScanner> scannersBuilder = ImmutableList.builder();
+  public XmlAnalyzer(SonarComponents sonarComponents, CodeVisitor... visitors) {
+    ImmutableList.Builder<XmlFileScanner> xmlScannersBuilder = ImmutableList.builder();
+    ImmutableList.Builder<MavenFileScanner> mavenScannersBuilder = ImmutableList.builder();
     for (CodeVisitor visitor : visitors) {
+      if (visitor instanceof XmlFileScanner) {
+        xmlScannersBuilder.add((XmlFileScanner) visitor);
+      }
       if (visitor instanceof MavenFileScanner) {
-        scannersBuilder.add((MavenFileScanner) visitor);
+        mavenScannersBuilder.add((MavenFileScanner) visitor);
       }
     }
-    this.scanners = scannersBuilder.build();
+    this.xmlFileScanners = xmlScannersBuilder.build();
+    this.mavenFileScanners = mavenScannersBuilder.build();
     this.sonarComponents = sonarComponents;
   }
 
   public void scan(Iterable<File> files) {
-    boolean hasMavenFileScanners = !scanners.isEmpty();
-    boolean hasPomFile = !Iterables.isEmpty(files);
-    if (hasMavenFileScanners && !hasPomFile) {
-      LOG.warn("No 'pom.xml' file have been indexed.");
+    boolean hasScanners = !xmlFileScanners.isEmpty() || !mavenFileScanners.isEmpty();
+    boolean hasXmlFile = !Iterables.isEmpty(files);
+    if (hasScanners && !hasXmlFile) {
+      LOG.warn("No 'xml' file have been indexed.");
       return;
     }
 
-    ProgressReport progressReport = new ProgressReport("Report about progress of Maven Pom analyzer", TimeUnit.SECONDS.toMillis(10));
+    ProgressReport progressReport = new ProgressReport("Report about progress of Xml analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(Lists.newArrayList(files));
 
     boolean successfulyCompleted = false;
@@ -75,15 +85,28 @@ public class MavenAnalyzer {
         progressReport.cancel();
       }
     }
-
   }
 
   private void simpleScan(File file) {
+    simpleScanAsXmlFile(file);
+    if ("pom.xml".equals(file.getName())) {
+      simpleScanAsPomFile(file);
+    }
+  }
+
+  private void simpleScanAsXmlFile(File file) {
+    XmlFileScannerContext scannerContext = new XmlFileScannerContextImpl(file, sonarComponents);
+    for (XmlFileScanner xmlFileScanner : xmlFileScanners) {
+      xmlFileScanner.scanFile(scannerContext);
+    }
+  }
+
+  private void simpleScanAsPomFile(File file) {
     MavenProject project = MavenParser.parseXML(file);
+    MavenFileScannerContext mavenContext = new MavenFileScannerContextImpl(project, file, sonarComponents);
     if (project != null) {
-      MavenFileScannerContext scannerContext = new MavenFileScannerContextImpl(project, file, sonarComponents);
-      for (MavenFileScanner mavenFileScanner : scanners) {
-        mavenFileScanner.scanFile(scannerContext);
+      for (MavenFileScanner mavenFileScanner : mavenFileScanners) {
+        mavenFileScanner.scanFile(mavenContext);
       }
     }
   }

@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.maven;
+package org.sonar.xml;
 
 import com.google.common.collect.Lists;
 import org.junit.Rule;
@@ -33,6 +33,9 @@ import org.sonar.plugins.java.api.JavaCheck;
 import org.sonar.plugins.java.api.JavaFileScanner;
 import org.sonar.plugins.java.api.JavaFileScannerContext;
 import org.sonar.squidbridge.api.CodeVisitor;
+import org.sonar.xml.maven.MavenCheck;
+import org.sonar.xml.maven.MavenFileScanner;
+import org.sonar.xml.maven.MavenFileScannerContext;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,9 +49,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class MavenAnalyzerTest {
+public class XmlAnalyzerTest {
 
-  private static final String SIMPLE_POM = "src/test/files/maven/simple-project-pom.xml";
+  private static final String SIMPLE_POM = "src/test/files/maven/simple-project/pom.xml";
 
   private static final CodeVisitor JAVA_CHECK = new JavaFileScanner() {
     @Override
@@ -70,11 +73,11 @@ public class MavenAnalyzerTest {
   @Test
   public void should_not_scan_file_with_parsing_issue() {
     DefaultFileSystem fs = new DefaultFileSystem(new File(""));
-    File pomFile = new File("src/test/files/maven/parse-issue-pom.xml");
+    File pomFile = new File("src/test/files/maven/parse-issue/pom.xml");
     fs.add(new DefaultInputFile(pomFile.getAbsolutePath()).setFile(pomFile).setLanguage("xml"));
     SonarComponents sonarComponents = createSonarComponentsMock(fs, MAVEN_CHECK);
 
-    MavenAnalyzer analyzer = new MavenAnalyzer(sonarComponents, MAVEN_CHECK);
+    XmlAnalyzer analyzer = new XmlAnalyzer(sonarComponents, MAVEN_CHECK);
     analyzer.scan(Lists.newArrayList(pomFile));
 
     verify(sonarComponents, never()).addIssue(any(File.class), any(MavenCheck.class), any(Integer.class), anyString(), isNull(Double.class));
@@ -86,14 +89,14 @@ public class MavenAnalyzerTest {
 
     DefaultFileSystem fs = new DefaultFileSystem(new File(""));
     File pomFile = new File(SIMPLE_POM);
-    fs.add(new DefaultInputFile(pomFile.getAbsolutePath()).setFile(pomFile).setLanguage("xml"));
+    fs.add(new DefaultInputFile(pomFile.getAbsolutePath()).setFile(pomFile));
     MavenCheckThrowingException check = new MavenCheckThrowingException(new RuntimeException("Analysis cancelled"));
     SonarComponents sonarComponents = createSonarComponentsMock(fs, check);
 
     thrown.expectMessage("Analysis cancelled");
     thrown.expect(RuntimeException.class);
 
-    MavenAnalyzer analyzer = new MavenAnalyzer(sonarComponents, check);
+    XmlAnalyzer analyzer = new XmlAnalyzer(sonarComponents, check);
     analyzer.scan(Lists.newArrayList(pomFile));
   }
 
@@ -101,10 +104,10 @@ public class MavenAnalyzerTest {
   public void should_scan_pom_file_provided() {
     DefaultFileSystem fs = new DefaultFileSystem(new File(""));
     File pomFile = new File(SIMPLE_POM);
-    fs.add(new DefaultInputFile(pomFile.getAbsolutePath()).setFile(pomFile).setLanguage("xml"));
+    fs.add(new DefaultInputFile(pomFile.getAbsolutePath()).setFile(pomFile));
     SonarComponents sonarComponents = createSonarComponentsMock(fs, MAVEN_CHECK);
 
-    MavenAnalyzer analyzer = new MavenAnalyzer(sonarComponents, MAVEN_CHECK);
+    XmlAnalyzer analyzer = new XmlAnalyzer(sonarComponents, MAVEN_CHECK);
     analyzer.scan(Lists.newArrayList(pomFile));
 
     verify(sonarComponents, times(1)).addIssue(any(File.class), any(MavenCheck.class), any(Integer.class), anyString(), isNull(Double.class));
@@ -112,11 +115,11 @@ public class MavenAnalyzerTest {
   }
 
   @Test
-  public void should_not_scan_when_no_pom_file_provided() {
+  public void should_not_scan_pom_when_no_pom_file_provided() {
     DefaultFileSystem fs = new DefaultFileSystem(new File(""));
     SonarComponents sonarComponents = createSonarComponentsMock(fs, MAVEN_CHECK);
 
-    MavenAnalyzer analyzer = new MavenAnalyzer(sonarComponents, MAVEN_CHECK);
+    XmlAnalyzer analyzer = new XmlAnalyzer(sonarComponents, MAVEN_CHECK);
     analyzer.scan(new ArrayList<File>());
 
     verify(sonarComponents, never()).addIssue(any(File.class), any(MavenCheck.class), any(Integer.class), anyString(), isNull(Double.class));
@@ -124,13 +127,13 @@ public class MavenAnalyzerTest {
   }
 
   @Test
-  public void should_not_scan_when_no_maven_check_provided() {
+  public void should_not_scan_when_no_xml_check_provided() {
     DefaultFileSystem fs = new DefaultFileSystem(new File(""));
     File pomFile = new File(SIMPLE_POM);
     fs.add(new DefaultInputFile(pomFile.getAbsolutePath()).setFile(pomFile).setLanguage("xml"));
     SonarComponents sonarComponents = createSonarComponentsMock(fs, JAVA_CHECK);
 
-    MavenAnalyzer analyzer = new MavenAnalyzer(sonarComponents, JAVA_CHECK);
+    XmlAnalyzer analyzer = new XmlAnalyzer(sonarComponents, JAVA_CHECK);
     analyzer.scan(Lists.newArrayList(pomFile));
 
     verify(sonarComponents, never()).addIssue(any(File.class), any(MavenCheck.class), any(Integer.class), anyString(), isNull(Double.class));

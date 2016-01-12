@@ -379,18 +379,18 @@ public final class CheckList {
 
   public static List<Class<? extends JavaCheck>> getJavaTestChecks() {
     return ImmutableList.<Class<? extends JavaCheck>>builder()
-        .add(IgnoredTestsCheck.class)
-        .add(BooleanLiteralInAssertionsCheck.class)
-        .add(AssertionsWithoutMessageCheck.class)
-        .add(CallSuperInTestCaseCheck.class)
-        .add(AssertionInThreadRunCheck.class)
-        .add(NoTestInTestClassCheck.class)
-        .add(AssertionsInTestsCheck.class)
-        .add(JunitMethodDeclarationCheck.class)
-        .add(AssertionsCompletenessCheck.class)
-        .add(ThreadSleepInTestsCheck.class)
-        .add(UnusedTestRuleCheck.class)
-        .build();
+      .add(IgnoredTestsCheck.class)
+      .add(BooleanLiteralInAssertionsCheck.class)
+      .add(AssertionsWithoutMessageCheck.class)
+      .add(CallSuperInTestCaseCheck.class)
+      .add(AssertionInThreadRunCheck.class)
+      .add(NoTestInTestClassCheck.class)
+      .add(AssertionsInTestsCheck.class)
+      .add(JunitMethodDeclarationCheck.class)
+      .add(AssertionsCompletenessCheck.class)
+      .add(ThreadSleepInTestsCheck.class)
+      .add(UnusedTestRuleCheck.class)
+      .build();
   }
 
   public static List<Class<? extends JavaCheck>> getMavenChecks() {
@@ -401,5 +401,9 @@ public final class CheckList {
       .add(ArtifactIdNamingConventionCheck.class)
       .add(DisallowedDependenciesCheck.class)
       .build();
+  }
+
+  public static List<Class<? extends JavaCheck>> getXmlChecks() {
+    return ImmutableList.<Class<? extends JavaCheck>>of();
   }
 }

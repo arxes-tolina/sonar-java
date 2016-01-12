@@ -22,12 +22,13 @@ package org.sonar.java.checks.verifier;
 import com.google.common.annotations.Beta;
 import org.fest.assertions.Fail;
 import org.sonar.java.AnalyzerMessage;
-import org.sonar.maven.MavenCheck;
-import org.sonar.maven.MavenFileScanner;
-import org.sonar.maven.MavenFileScannerContext;
-import org.sonar.maven.MavenParser;
 import org.sonar.maven.model.LocatedTree;
 import org.sonar.maven.model.maven2.MavenProject;
+import org.sonar.xml.XmlCheck;
+import org.sonar.xml.maven.MavenCheck;
+import org.sonar.xml.maven.MavenFileScanner;
+import org.sonar.xml.maven.MavenFileScannerContext;
+import org.sonar.xml.maven.MavenParser;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -110,12 +111,17 @@ public class MavenCheckVerifier extends CheckVerifier {
     }
 
     @Override
+    public File getXmlFile() {
+      return file;
+    }
+
+    @Override
     public MavenProject getMavenProject() {
       return project;
     }
 
     @Override
-    public void reportIssueOnFile(MavenCheck check, String message) {
+    public void reportIssueOnFile(XmlCheck check, String message) {
       messages.add(new AnalyzerMessage(check, file, -1, message, 0));
     }
 
@@ -125,7 +131,7 @@ public class MavenCheckVerifier extends CheckVerifier {
     }
 
     @Override
-    public void reportIssue(MavenCheck check, int line, String message) {
+    public void reportIssue(XmlCheck check, int line, String message) {
       messages.add(new AnalyzerMessage(check, file, line, message, 0));
     }
 

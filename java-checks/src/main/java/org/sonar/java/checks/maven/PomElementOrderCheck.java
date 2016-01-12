@@ -23,13 +23,13 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.java.tag.Tag;
-import org.sonar.maven.MavenFileScanner;
-import org.sonar.maven.MavenFileScannerContext;
-import org.sonar.maven.MavenFileScannerContext.Location;
 import org.sonar.maven.model.LocatedTree;
 import org.sonar.maven.model.maven2.MavenProject;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
+import org.sonar.xml.maven.MavenFileScanner;
+import org.sonar.xml.maven.MavenFileScannerContext;
+import org.sonar.xml.maven.MavenFileScannerContext.Location;
 
 import java.util.Collections;
 import java.util.Comparator;

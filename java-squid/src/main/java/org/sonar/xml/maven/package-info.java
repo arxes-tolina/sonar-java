@@ -17,12 +17,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.maven;
+@ParametersAreNonnullByDefault
+package org.sonar.xml.maven;
 
-import org.sonar.plugins.java.api.JavaCheck;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-/**
- * Marker interface for the Maven checks.
- */
-public interface MavenCheck extends JavaCheck {
-}

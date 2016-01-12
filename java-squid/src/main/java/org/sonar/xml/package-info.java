@@ -17,35 +17,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.maven;
+@ParametersAreNonnullByDefault
+package org.sonar.xml;
 
-import com.google.common.annotations.Beta;
-import org.sonar.maven.model.LocatedTree;
-import org.sonar.maven.model.maven2.MavenProject;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import java.util.List;
-
-@Beta
-public interface MavenFileScannerContext {
-
-  MavenProject getMavenProject();
-
-  void reportIssueOnFile(MavenCheck check, String message);
-
-  void reportIssue(MavenCheck check, LocatedTree tree, String message);
-
-  void reportIssue(MavenCheck check, int line, String message);
-
-  void reportIssue(MavenCheck check, int line, String message, List<Location> secondary);
-
-  class Location {
-    public final String msg;
-    public final LocatedTree tree;
-
-    public Location(String msg, LocatedTree tree) {
-      this.msg = msg;
-      this.tree = tree;
-    }
-  }
-
-}

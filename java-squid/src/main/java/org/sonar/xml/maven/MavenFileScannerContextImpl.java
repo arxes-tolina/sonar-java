@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.maven;
+package org.sonar.xml.maven;
 
 import com.google.common.annotations.VisibleForTesting;
 import org.sonar.java.AnalyzerMessage;
@@ -26,20 +26,18 @@ import org.sonar.java.SonarComponents;
 import org.sonar.maven.model.LocatedTree;
 import org.sonar.maven.model.XmlLocation;
 import org.sonar.maven.model.maven2.MavenProject;
+import org.sonar.xml.XmlFileScannerContextImpl;
 
 import java.io.File;
 import java.util.List;
 
-public class MavenFileScannerContextImpl implements MavenFileScannerContext {
+public class MavenFileScannerContextImpl extends XmlFileScannerContextImpl implements MavenFileScannerContext {
 
   private final MavenProject project;
-  private final File file;
-  private final SonarComponents sonarComponents;
 
   public MavenFileScannerContextImpl(MavenProject project, File file, SonarComponents sonarComponents) {
+    super(file, sonarComponents);
     this.project = project;
-    this.file = file;
-    this.sonarComponents = sonarComponents;
   }
 
   @Override
@@ -48,32 +46,23 @@ public class MavenFileScannerContextImpl implements MavenFileScannerContext {
   }
 
   @Override
-  public void reportIssueOnFile(MavenCheck check, String message) {
-    sonarComponents.addIssue(file, check, -1, message, null);
-  }
-
-  @Override
   public void reportIssue(MavenCheck check, LocatedTree tree, String message) {
-    sonarComponents.addIssue(file, check, tree.startLocation().line(), message, null);
-  }
-
-  @Override
-  public void reportIssue(MavenCheck check, int line, String message) {
-    sonarComponents.addIssue(file, check, line, message, null);
+    getSonarComponents().addIssue(getFile(), check, tree.startLocation().line(), message, null);
   }
 
   @Override
   public void reportIssue(MavenCheck check, int line, String message, List<Location> secondary) {
+    File file = getFile();
     AnalyzerMessage analyzerMessage = new AnalyzerMessage(check, file, line, message, 0);
     for (Location location : secondary) {
-      AnalyzerMessage secondaryLocation = getSecondaryAnalyzerMessage(check, location);
+      AnalyzerMessage secondaryLocation = getSecondaryAnalyzerMessage(check, file, location);
       analyzerMessage.secondaryLocations.add(secondaryLocation);
     }
-    sonarComponents.reportIssue(analyzerMessage);
+    getSonarComponents().reportIssue(analyzerMessage);
   }
 
   @VisibleForTesting
-  AnalyzerMessage getSecondaryAnalyzerMessage(MavenCheck check, Location location) {
+  static AnalyzerMessage getSecondaryAnalyzerMessage(MavenCheck check, File file, Location location) {
     XmlLocation startLocation = location.tree.startLocation();
     int startLine = startLocation.line();
     int startColumn = startLocation.column();

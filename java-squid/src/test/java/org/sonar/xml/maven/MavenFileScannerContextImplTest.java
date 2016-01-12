@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.maven;
+package org.sonar.xml.maven;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,11 +25,14 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.java.AnalyzerMessage;
 import org.sonar.java.SonarComponents;
-import org.sonar.maven.MavenFileScannerContext.Location;
 import org.sonar.maven.model.LocatedTree;
 import org.sonar.maven.model.LocatedTreeImpl;
 import org.sonar.maven.model.XmlLocation;
 import org.sonar.maven.model.maven2.MavenProject;
+import org.sonar.xml.maven.MavenCheck;
+import org.sonar.xml.maven.MavenFileScannerContext;
+import org.sonar.xml.maven.MavenFileScannerContextImpl;
+import org.sonar.xml.maven.MavenFileScannerContext.Location;
 
 import java.io.File;
 import java.util.ArrayList;

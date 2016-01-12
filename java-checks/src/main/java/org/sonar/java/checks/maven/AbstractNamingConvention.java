@@ -19,10 +19,10 @@
  */
 package org.sonar.java.checks.maven;
 
-import org.sonar.maven.MavenFileScanner;
-import org.sonar.maven.MavenFileScannerContext;
 import org.sonar.maven.model.LocatedAttribute;
 import org.sonar.maven.model.maven2.MavenProject;
+import org.sonar.xml.maven.MavenFileScanner;
+import org.sonar.xml.maven.MavenFileScannerContext;
 
 import javax.annotation.Nullable;
 
