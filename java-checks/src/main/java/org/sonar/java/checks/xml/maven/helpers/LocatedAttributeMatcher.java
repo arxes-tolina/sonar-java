@@ -17,14 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven;
+package org.sonar.java.checks.xml.maven.helpers;
 
-import org.junit.Test;
-import org.sonar.java.checks.verifier.MavenCheckVerifier;
+import org.sonar.maven.model.LocatedAttribute;
 
-public class DependencyWithSystemScopeCheckTest {
-  @Test
-  public void test_check() {
-    MavenCheckVerifier.verify("src/test/files/checks/maven/DependencyWithSystemScopeCheck.xml", new DependencyWithSystemScopeCheck());
+import javax.annotation.Nullable;
+
+public interface LocatedAttributeMatcher {
+
+  boolean matches(@Nullable LocatedAttribute tree);
+
+  public static class AlwaysMatchingMatcher implements LocatedAttributeMatcher {
+    @Override
+    public boolean matches(@Nullable LocatedAttribute tree) {
+      return true;
+    }
   }
 }

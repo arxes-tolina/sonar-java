@@ -17,21 +17,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven;
+@ParametersAreNonnullByDefault
+package org.sonar.java.checks.xml.maven.helpers;
 
-import org.junit.Test;
-import org.sonar.java.checks.verifier.MavenCheckVerifier;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-public class PomElementOrderCheckTest {
-
-  @Test
-  public void should_raise_issue_if_order_is_wrong() {
-    MavenCheckVerifier.verify("src/test/files/checks/maven/PomElementOrderCheck.xml", new PomElementOrderCheck());
-  }
-
-  @Test
-  public void should_not_raise_issue_if_order_is_correct() {
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/PomElementOrderCheckCorrectOrder.xml", new PomElementOrderCheck());
-  }
-
-}

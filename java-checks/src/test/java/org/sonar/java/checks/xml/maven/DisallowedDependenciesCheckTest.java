@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven;
+package org.sonar.java.checks.xml.maven;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,33 +35,33 @@ public class DisallowedDependenciesCheckTest {
   @Test
   public void without_version() {
     check.dependencyName = "*:log4j";
-    MavenCheckVerifier.verify("src/test/files/checks/maven/disallowedDependenciesCheck/noVersion-pom.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/disallowedDependenciesCheck/noVersion-pom.xml", check);
   }
 
   @Test
   public void with_simple_version() {
     check.dependencyName = "*:log4j";
     check.version = "1.2.*";
-    MavenCheckVerifier.verify("src/test/files/checks/maven/disallowedDependenciesCheck/regexVersion-pom.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/disallowedDependenciesCheck/regexVersion-pom.xml", check);
   }
 
   @Test
   public void with_range_version() {
     check.dependencyName = "*:log4j";
     check.version = "1.1.0-1.2.15";
-    MavenCheckVerifier.verify("src/test/files/checks/maven/disallowedDependenciesCheck/rangeVersion-pom.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/disallowedDependenciesCheck/rangeVersion-pom.xml", check);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void should_fail_with_invalid_name_provided() {
     check.dependencyName = "org.sonar";
-    MavenCheckVerifier.verify("src/test/files/checks/maven/disallowedDependenciesCheck/noVersion-pom.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/disallowedDependenciesCheck/noVersion-pom.xml", check);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void should_fail_with_invalid_version_provided() {
     check.dependencyName = "org.sonar.*:*";
     check.version = "version-0";
-    MavenCheckVerifier.verify("src/test/files/checks/maven/disallowedDependenciesCheck/noVersion-pom.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/disallowedDependenciesCheck/noVersion-pom.xml", check);
   }
 }

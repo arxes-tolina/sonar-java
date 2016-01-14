@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven;
+package org.sonar.java.checks.xml.maven;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,18 +32,18 @@ public class GroupIdNamingConventionCheckTest {
   @Test
   public void test_default() {
     GroupIdNamingConventionCheck check = new GroupIdNamingConventionCheck();
-    MavenCheckVerifier.verify("src/test/files/checks/maven/GroupIdNamingConventionCheckDefaultNOK.xml", check);
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/GroupIdNamingConventionCheckDefaultOK.xml", check);
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/GroupIdNamingConventionCheckNoGroupId.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/GroupIdNamingConventionCheckDefaultNOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/GroupIdNamingConventionCheckDefaultOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/GroupIdNamingConventionCheckNoGroupId.xml", check);
   }
 
   @Test
   public void test_custom() {
     GroupIdNamingConventionCheck check = new GroupIdNamingConventionCheck();
     check.regex = "[a-z][a-z-0-9]*";
-    MavenCheckVerifier.verify("src/test/files/checks/maven/GroupIdNamingConventionCheckCustomNOK.xml", check);
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/GroupIdNamingConventionCheckCustomOK.xml", check);
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/GroupIdNamingConventionCheckNoGroupId.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/GroupIdNamingConventionCheckCustomNOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/GroupIdNamingConventionCheckCustomOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/GroupIdNamingConventionCheckNoGroupId.xml", check);
   }
 
   @Test
@@ -53,6 +53,6 @@ public class GroupIdNamingConventionCheckTest {
 
     GroupIdNamingConventionCheck check = new GroupIdNamingConventionCheck();
     check.regex = "*";
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/GroupIdNamingConventionCheckDefaultOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/GroupIdNamingConventionCheckDefaultOK.xml", check);
   }
 }

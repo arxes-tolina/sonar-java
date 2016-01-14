@@ -17,28 +17,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven.helpers;
+package org.sonar.java.checks.xml.maven.helpers;
 
-import org.junit.Test;
 import org.sonar.maven.model.LocatedAttribute;
 
-import static org.fest.assertions.Assertions.assertThat;
+import javax.annotation.Nullable;
 
-public class PatternMatcherTest {
+import java.util.regex.Pattern;
 
-  private PatternMatcher matcher;
+public class PatternMatcher implements LocatedAttributeMatcher {
 
-  @Test
-  public void should_match_patterns() {
-    matcher = new PatternMatcher("[a-z]*");
-    assertThat(matcher.matches(null)).isFalse();
-    assertThat(matcher.matches(new LocatedAttribute("test"))).isTrue();
-    assertThat(matcher.matches(new LocatedAttribute("012"))).isFalse();
+  private final Pattern pattern;
+
+  public PatternMatcher(String regex) {
+    this.pattern = compileRegex(regex);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void should_fail_on_invalid_regex() {
-    new PatternMatcher("*");
+  @Override
+  public boolean matches(@Nullable LocatedAttribute attribute) {
+    return attribute != null && pattern.matcher(attribute.getValue()).matches();
+  }
+
+  private static Pattern compileRegex(String regex) {
+    try {
+      return Pattern.compile(regex, Pattern.DOTALL);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Unable to compile the regular expression: " + regex, e);
+    }
   }
 
 }

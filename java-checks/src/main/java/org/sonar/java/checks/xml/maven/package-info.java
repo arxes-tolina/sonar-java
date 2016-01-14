@@ -17,20 +17,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven.helpers;
+@ParametersAreNonnullByDefault
+package org.sonar.java.checks.xml.maven;
 
-import org.sonar.maven.model.LocatedAttribute;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import javax.annotation.Nullable;
-
-public interface LocatedAttributeMatcher {
-
-  boolean matches(@Nullable LocatedAttribute tree);
-
-  public static class AlwaysMatchingMatcher implements LocatedAttributeMatcher {
-    @Override
-    public boolean matches(@Nullable LocatedAttribute tree) {
-      return true;
-    }
-  }
-}

@@ -17,15 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven;
+package org.sonar.java.checks.xml.maven;
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.java.checks.maven.helpers.MavenDependencyCollector;
-import org.sonar.java.checks.maven.helpers.MavenDependencyMatcher;
-import org.sonar.maven.MavenFileScanner;
-import org.sonar.maven.MavenFileScannerContext;
+import org.sonar.java.checks.xml.maven.helpers.MavenDependencyCollector;
+import org.sonar.java.checks.xml.maven.helpers.MavenDependencyMatcher;
+import org.sonar.java.xml.maven.MavenFileScanner;
+import org.sonar.java.xml.maven.MavenFileScannerContext;
 import org.sonar.maven.model.maven2.Dependency;
 import org.sonar.squidbridge.annotations.NoSqale;
 import org.sonar.squidbridge.annotations.RuleTemplate;

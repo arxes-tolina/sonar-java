@@ -17,8 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-@ParametersAreNonnullByDefault
-package org.sonar.java.checks.maven.helpers;
+package org.sonar.java.checks.xml.maven.helpers;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.junit.Test;
+import org.sonar.java.checks.xml.maven.helpers.LocatedAttributeMatcher;
+import org.sonar.maven.model.LocatedAttribute;
 
+import static org.fest.assertions.Assertions.assertThat;
+
+public class LocatedAttributeMatcherTest {
+
+  @Test
+  public void matcher_always_matching_always_match() {
+    LocatedAttributeMatcher.AlwaysMatchingMatcher matcher = new LocatedAttributeMatcher.AlwaysMatchingMatcher();
+    assertThat(matcher.matches(null)).isTrue();
+    assertThat(matcher.matches(new LocatedAttribute("test"))).isTrue();
+  }
+}

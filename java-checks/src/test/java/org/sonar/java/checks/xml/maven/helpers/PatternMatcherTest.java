@@ -17,8 +17,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-@ParametersAreNonnullByDefault
-package org.sonar.java.checks.maven;
+package org.sonar.java.checks.xml.maven.helpers;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.junit.Test;
+import org.sonar.java.checks.xml.maven.helpers.PatternMatcher;
+import org.sonar.maven.model.LocatedAttribute;
 
+import static org.fest.assertions.Assertions.assertThat;
+
+public class PatternMatcherTest {
+
+  private PatternMatcher matcher;
+
+  @Test
+  public void should_match_patterns() {
+    matcher = new PatternMatcher("[a-z]*");
+    assertThat(matcher.matches(null)).isFalse();
+    assertThat(matcher.matches(new LocatedAttribute("test"))).isTrue();
+    assertThat(matcher.matches(new LocatedAttribute("012"))).isFalse();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void should_fail_on_invalid_regex() {
+    new PatternMatcher("*");
+  }
+
+}

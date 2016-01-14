@@ -20,11 +20,11 @@
 package org.sonar.java.checks;
 
 import com.google.common.collect.ImmutableList;
-import org.sonar.java.checks.maven.ArtifactIdNamingConventionCheck;
-import org.sonar.java.checks.maven.DependencyWithSystemScopeCheck;
-import org.sonar.java.checks.maven.DisallowedDependenciesCheck;
-import org.sonar.java.checks.maven.GroupIdNamingConventionCheck;
-import org.sonar.java.checks.maven.PomElementOrderCheck;
+import org.sonar.java.checks.xml.maven.ArtifactIdNamingConventionCheck;
+import org.sonar.java.checks.xml.maven.DependencyWithSystemScopeCheck;
+import org.sonar.java.checks.xml.maven.DisallowedDependenciesCheck;
+import org.sonar.java.checks.xml.maven.GroupIdNamingConventionCheck;
+import org.sonar.java.checks.xml.maven.PomElementOrderCheck;
 import org.sonar.java.se.checks.ConditionAlwaysTrueOrFalseCheck;
 import org.sonar.java.se.checks.LocksNotUnlockedCheck;
 import org.sonar.java.se.checks.NullDereferenceCheck;

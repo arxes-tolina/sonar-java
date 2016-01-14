@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven.helpers;
+package org.sonar.java.checks.xml.maven.helpers;
 
 import org.fest.assertions.Fail;
 import org.junit.Test;
@@ -68,7 +68,7 @@ public class MavenDependencyCollectorTest {
   }
 
   private static MavenProject parse(String testCase) {
-    File file = new File("src/test/files/checks/maven/dependencyCollector/" + testCase + "-pom.xml");
+    File file = new File("src/test/files/checks/xml/maven/dependencyCollector/" + testCase + "-pom.xml");
     MavenProject project = MavenParser.parseXML(file);
     if (project == null) {
       Fail.fail("unable to parse test case: " + file.getAbsolutePath());

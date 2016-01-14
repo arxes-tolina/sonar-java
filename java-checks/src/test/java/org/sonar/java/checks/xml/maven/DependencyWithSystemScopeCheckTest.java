@@ -17,33 +17,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven.helpers;
+package org.sonar.java.checks.xml.maven;
 
-import org.sonar.maven.model.LocatedAttribute;
+import org.junit.Test;
+import org.sonar.java.checks.verifier.MavenCheckVerifier;
 
-import javax.annotation.Nullable;
-
-import java.util.regex.Pattern;
-
-public class PatternMatcher implements LocatedAttributeMatcher {
-
-  private final Pattern pattern;
-
-  public PatternMatcher(String regex) {
-    this.pattern = compileRegex(regex);
+public class DependencyWithSystemScopeCheckTest {
+  @Test
+  public void test_check() {
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/DependencyWithSystemScopeCheck.xml", new DependencyWithSystemScopeCheck());
   }
-
-  @Override
-  public boolean matches(@Nullable LocatedAttribute attribute) {
-    return attribute != null && pattern.matcher(attribute.getValue()).matches();
-  }
-
-  private static Pattern compileRegex(String regex) {
-    try {
-      return Pattern.compile(regex, Pattern.DOTALL);
-    } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Unable to compile the regular expression: " + regex, e);
-    }
-  }
-
 }

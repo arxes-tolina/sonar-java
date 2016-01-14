@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven;
+package org.sonar.java.checks.xml.maven;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,18 +32,18 @@ public class ArtifactIdNamingConventionCheckTest {
   @Test
   public void test_default() {
     ArtifactIdNamingConventionCheck check = new ArtifactIdNamingConventionCheck();
-    MavenCheckVerifier.verify("src/test/files/checks/maven/ArtifactIdNamingConventionCheckDefaultNOK.xml", check);
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/ArtifactIdNamingConventionCheckDefaultOK.xml", check);
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/ArtifactIdNamingConventionCheckNoArtifactId.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/ArtifactIdNamingConventionCheckDefaultNOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/ArtifactIdNamingConventionCheckDefaultOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/ArtifactIdNamingConventionCheckNoArtifactId.xml", check);
   }
 
   @Test
   public void test_custom() {
     ArtifactIdNamingConventionCheck check = new ArtifactIdNamingConventionCheck();
     check.regex = "[a-z]+";
-    MavenCheckVerifier.verify("src/test/files/checks/maven/ArtifactIdNamingConventionCheckCustomNOK.xml", check);
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/ArtifactIdNamingConventionCheckCustomOK.xml", check);
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/ArtifactIdNamingConventionCheckNoArtifactId.xml", check);
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/ArtifactIdNamingConventionCheckCustomNOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/ArtifactIdNamingConventionCheckCustomOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/ArtifactIdNamingConventionCheckNoArtifactId.xml", check);
   }
 
   @Test
@@ -53,7 +53,7 @@ public class ArtifactIdNamingConventionCheckTest {
 
     ArtifactIdNamingConventionCheck check = new ArtifactIdNamingConventionCheck();
     check.regex = "*";
-    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/maven/ArtifactIdNamingConventionCheckDefaultOK.xml", check);
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/ArtifactIdNamingConventionCheckDefaultOK.xml", check);
   }
 
 }

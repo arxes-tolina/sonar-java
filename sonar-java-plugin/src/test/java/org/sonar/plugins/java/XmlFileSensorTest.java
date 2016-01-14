@@ -34,7 +34,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.rules.RuleAnnotationUtils;
 import org.sonar.java.AnalyzerMessage;
 import org.sonar.java.SonarComponents;
-import org.sonar.java.checks.maven.PomElementOrderCheck;
+import org.sonar.java.checks.xml.maven.PomElementOrderCheck;
 import org.sonar.plugins.java.api.JavaCheck;
 import org.sonar.squidbridge.api.CodeVisitor;
 

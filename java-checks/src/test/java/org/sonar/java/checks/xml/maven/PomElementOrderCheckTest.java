@@ -17,19 +17,21 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven.helpers;
+package org.sonar.java.checks.xml.maven;
 
 import org.junit.Test;
-import org.sonar.maven.model.LocatedAttribute;
+import org.sonar.java.checks.verifier.MavenCheckVerifier;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-public class LocatedAttributeMatcherTest {
+public class PomElementOrderCheckTest {
 
   @Test
-  public void matcher_always_matching_always_match() {
-    LocatedAttributeMatcher.AlwaysMatchingMatcher matcher = new LocatedAttributeMatcher.AlwaysMatchingMatcher();
-    assertThat(matcher.matches(null)).isTrue();
-    assertThat(matcher.matches(new LocatedAttribute("test"))).isTrue();
+  public void should_raise_issue_if_order_is_wrong() {
+    MavenCheckVerifier.verify("src/test/files/checks/xml/maven/PomElementOrderCheck.xml", new PomElementOrderCheck());
   }
+
+  @Test
+  public void should_not_raise_issue_if_order_is_correct() {
+    MavenCheckVerifier.verifyNoIssue("src/test/files/checks/xml/maven/PomElementOrderCheckCorrectOrder.xml", new PomElementOrderCheck());
+  }
+
 }

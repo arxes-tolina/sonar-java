@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven;
+package org.sonar.java.checks.xml.maven;
 
 import org.sonar.java.xml.maven.MavenFileScanner;
 import org.sonar.java.xml.maven.MavenFileScannerContext;

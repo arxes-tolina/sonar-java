@@ -17,9 +17,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonar.java.checks.maven.helpers;
+package org.sonar.java.checks.xml.maven.helpers;
 
 import org.junit.Test;
+import org.sonar.java.checks.xml.maven.helpers.MavenDependencyMatcher;
 import org.sonar.maven.model.LocatedAttribute;
 import org.sonar.maven.model.maven2.Dependency;
 
