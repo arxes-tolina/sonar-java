@@ -22,8 +22,8 @@ package org.sonar.java.checks.verifier;
 import com.google.common.annotations.Beta;
 import org.fest.assertions.Fail;
 import org.sonar.java.AnalyzerMessage;
+import org.sonar.java.checks.verifier.XmlCheckVerifier.FakeXmlFileScannerContext;
 import org.sonar.java.xml.XmlCheck;
-import org.sonar.java.xml.XmlFileScannerContextImpl;
 import org.sonar.java.xml.XmlParser;
 import org.sonar.java.xml.maven.MavenFileScanner;
 import org.sonar.java.xml.maven.MavenFileScannerContext;
@@ -32,14 +32,7 @@ import org.sonar.maven.model.LocatedTree;
 import org.sonar.maven.model.maven2.MavenProject;
 import org.w3c.dom.Document;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 
 @Beta
@@ -72,51 +65,24 @@ public class MavenCheckVerifier extends CheckVerifier {
 
   private static void scanFile(String filename, MavenFileScanner check, MavenCheckVerifier mavenCheckVerifier) {
     File pom = new File(filename);
-    Document document = XmlParser.parseXML(pom);
     MavenProject project = MavenParser.parseXML(pom);
     if (project != null) {
-      retrieveExpectedIssuesFromFile(pom, mavenCheckVerifier);
-      FakeMavenFileScannerContext context = new FakeMavenFileScannerContext(document, pom, project);
+      XmlCheckVerifier.retrieveExpectedIssuesFromFile(pom, mavenCheckVerifier);
+      FakeMavenFileScannerContext context = new FakeMavenFileScannerContext(XmlParser.parseXML(pom), pom, project);
       check.scanFile(context);
-      mavenCheckVerifier.checkIssues(context.messages, false);
+      mavenCheckVerifier.checkIssues(context.getMessages(), false);
     } else {
       Fail.fail("The test file can not be parsed");
     }
   }
 
-  private static void retrieveExpectedIssuesFromFile(File pom, MavenCheckVerifier mavenCheckVerifier) {
-    try (FileInputStream is = new FileInputStream(pom)) {
-      XMLInputFactory factory = XMLInputFactory.newInstance();
-      XMLStreamReader reader = factory.createXMLStreamReader(is);
+  private static class FakeMavenFileScannerContext extends FakeXmlFileScannerContext implements MavenFileScannerContext {
 
-      while (reader.hasNext()) {
-        int line = reader.getLocation().getLineNumber();
-        reader.next();
-        if (reader.getEventType() == XMLStreamReader.COMMENT) {
-          String text = reader.getText().trim();
-          mavenCheckVerifier.collectExpectedIssues(text, line);
-        }
-      }
-    } catch (XMLStreamException | IOException e) {
-      Fail.fail("The test file can not be parsed to retrieve comments", e);
-    }
-  }
-
-  private static class FakeMavenFileScannerContext extends XmlFileScannerContextImpl implements MavenFileScannerContext {
-
-    private final File file;
     private final MavenProject project;
-    private final HashSet<AnalyzerMessage> messages = new HashSet<>();
 
-    public FakeMavenFileScannerContext(Document document, File file, MavenProject project) {
-      super(document, file, null);
-      this.file = file;
+    public FakeMavenFileScannerContext(Document document, File pom, MavenProject project) {
+      super(document, pom);
       this.project = project;
-    }
-
-    @Override
-    public File getXmlFile() {
-      return file;
     }
 
     @Override
@@ -125,28 +91,18 @@ public class MavenCheckVerifier extends CheckVerifier {
     }
 
     @Override
-    public void reportIssueOnFile(XmlCheck check, String message) {
-      messages.add(new AnalyzerMessage(check, file, -1, message, 0));
-    }
-
-    @Override
     public void reportIssue(XmlCheck check, LocatedTree tree, String message) {
-      messages.add(new AnalyzerMessage(check, file, tree.startLocation().line(), message, 0));
-    }
-
-    @Override
-    public void reportIssue(XmlCheck check, int line, String message) {
-      messages.add(new AnalyzerMessage(check, file, line, message, 0));
+      reportIssue(check, tree.startLocation().line(), message);
     }
 
     @Override
     public void reportIssue(XmlCheck check, int line, String message, List<Location> secondary) {
-      AnalyzerMessage analyzerMessage = new AnalyzerMessage(check, file, line, message, 0);
+      AnalyzerMessage analyzerMessage = new AnalyzerMessage(check, getXmlFile(), line, message, 0);
       for (Location location : secondary) {
-        AnalyzerMessage secondaryLocation = new AnalyzerMessage(check, file, location.tree.startLocation().line(), location.msg, 0);
+        AnalyzerMessage secondaryLocation = new AnalyzerMessage(check, getXmlFile(), location.tree.startLocation().line(), location.msg, 0);
         analyzerMessage.secondaryLocations.add(secondaryLocation);
       }
-      messages.add(analyzerMessage);
+      getMessages().add(analyzerMessage);
     }
   }
 }
