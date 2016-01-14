@@ -20,6 +20,7 @@
 package org.sonar.java.checks;
 
 import com.google.common.collect.ImmutableList;
+import org.sonar.java.checks.xml.ejb.DefaultInterceptorsLocationCheck;
 import org.sonar.java.checks.xml.maven.ArtifactIdNamingConventionCheck;
 import org.sonar.java.checks.xml.maven.DependencyWithSystemScopeCheck;
 import org.sonar.java.checks.xml.maven.DisallowedDependenciesCheck;
@@ -29,7 +30,6 @@ import org.sonar.java.se.checks.ConditionAlwaysTrueOrFalseCheck;
 import org.sonar.java.se.checks.LocksNotUnlockedCheck;
 import org.sonar.java.se.checks.NullDereferenceCheck;
 import org.sonar.java.se.checks.UnclosedResourcesCheck;
-import org.sonar.java.xml.XmlCheck;
 import org.sonar.plugins.java.api.JavaCheck;
 
 import java.util.List;
@@ -397,6 +397,7 @@ public final class CheckList {
   public static List<Class<? extends JavaCheck>> getXmlChecks() {
     return ImmutableList.<Class<? extends JavaCheck>>builder()
       .addAll(getMavenChecks())
+      .add(DefaultInterceptorsLocationCheck.class)
       .build();
   }
 
