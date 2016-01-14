@@ -21,6 +21,7 @@ package org.sonar.java.xml;
 
 import org.sonar.java.SonarComponents;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
@@ -54,6 +55,12 @@ public class XmlFileScannerContextImpl implements XmlFileScannerContext {
   }
 
   @Override
+  public NodeList evaluateXPathExpressionFromNode(Node node, String expression) throws XPathExpressionException {
+    XPath xPath = XPathFactory.newInstance().newXPath();
+    return (NodeList) xPath.compile(expression).evaluate(node, XPathConstants.NODESET);
+  }
+
+  @Override
   public void reportIssueOnFile(XmlCheck check, String message) {
     sonarComponents.addIssue(file, check, -1, message, null);
   }
@@ -63,8 +70,13 @@ public class XmlFileScannerContextImpl implements XmlFileScannerContext {
     sonarComponents.addIssue(file, check, line, message, null);
   }
 
-  public File getFile() {
-    return file;
+  @Override
+  public void reportIssue(XmlCheck check, Node node, String message) {
+    Node lineAttribute = node.getAttributes().getNamedItem(XmlParser.START_LINE_ATTRIBUTE);
+    if (lineAttribute != null) {
+      Integer line = Integer.valueOf(lineAttribute.getNodeValue());
+      sonarComponents.addIssue(file, check, line, message, null);
+    }
   }
 
   public SonarComponents getSonarComponents() {

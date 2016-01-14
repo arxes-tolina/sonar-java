@@ -49,12 +49,12 @@ public class MavenFileScannerContextImpl extends XmlFileScannerContextImpl imple
 
   @Override
   public void reportIssue(XmlCheck check, LocatedTree tree, String message) {
-    getSonarComponents().addIssue(getFile(), check, tree.startLocation().line(), message, null);
+    getSonarComponents().addIssue(getXmlFile(), check, tree.startLocation().line(), message, null);
   }
 
   @Override
   public void reportIssue(XmlCheck check, int line, String message, List<Location> secondary) {
-    File file = getFile();
+    File file = getXmlFile();
     AnalyzerMessage analyzerMessage = new AnalyzerMessage(check, file, line, message, 0);
     for (Location location : secondary) {
       AnalyzerMessage secondaryLocation = getSecondaryAnalyzerMessage(check, file, location);

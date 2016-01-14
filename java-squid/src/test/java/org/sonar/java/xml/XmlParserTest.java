@@ -37,7 +37,7 @@ public class XmlParserTest {
   public void should_parse_xml() {
     doc = XmlParser.parseXML(new File("src/test/files/xml/parsing.xml"));
 
-    assertPositionsMatch("assembly-descriptor", 1, 22, 16, 23);
+    assertPositionsMatch("assembly-descriptor", 1, 22, 21, 23);
   }
 
   private void assertPositionsMatch(String tagName, int startLine, int startColumn, int endLine, int endColumn) {

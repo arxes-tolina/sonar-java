@@ -20,6 +20,7 @@
 package org.sonar.java.xml;
 
 import com.google.common.annotations.Beta;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -33,7 +34,11 @@ public interface XmlFileScannerContext {
 
   NodeList evaluateXPathExpression(String expression) throws XPathExpressionException;
 
+  NodeList evaluateXPathExpressionFromNode(Node node, String expression) throws XPathExpressionException;
+
   void reportIssueOnFile(XmlCheck check, String message);
 
   void reportIssue(XmlCheck check, int line, String message);
+
+  void reportIssue(XmlCheck check, Node node, String message);
 }

@@ -13,4 +13,9 @@
   <test>
     <![CDATA[myCDATA]]>
   </test>
+  <test2>
+    <item></item>
+    <item></item>
+    <item></item>
+  </test2>
 </assembly-descriptor>
