@@ -19,6 +19,8 @@
  */
 package org.sonar.java.xml;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,6 +42,8 @@ import java.util.LinkedList;
 
 public class XmlParser {
 
+  private static final Logger LOG = LoggerFactory.getLogger(XmlParser.class);
+
   public static final String START_LINE_ATTRIBUTE = "start_line";
   public static final String START_COLUMN_ATTRIBUTE = "start_column";
   public static final String END_LINE_ATTRIBUTE = "end_line";
@@ -49,19 +53,19 @@ public class XmlParser {
   }
 
   public static Document parseXML(File file) {
-    Document document = null;
     try {
       SAXParserFactory factory = SAXParserFactory.newInstance();
       SAXParser parser = factory.newSAXParser();
       DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
       DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-      document = docBuilder.newDocument();
+      Document document = docBuilder.newDocument();
       LocationHandler locationHandler = new LocationHandler(document);
       parser.parse(file, locationHandler);
+      return document;
     } catch (ParserConfigurationException | SAXException | IOException e) {
-      e.printStackTrace();
+      LOG.error("Unable to parse xml file " + file.getPath(), e);
     }
-    return document;
+    return null;
   }
 
   private static class LocationHandler extends DefaultHandler {
