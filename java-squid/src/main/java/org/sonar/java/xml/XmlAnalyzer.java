@@ -90,9 +90,11 @@ public class XmlAnalyzer {
 
   private void simpleScan(File file) {
     Document document = XmlParser.parseXML(file);
-    simpleScanAsXmlFile(file, document);
-    if ("pom.xml".equals(file.getName())) {
-      simpleScanAsPomFile(file, document);
+    if (document != null) {
+      simpleScanAsXmlFile(file, document);
+      if ("pom.xml".equals(file.getName())) {
+        simpleScanAsPomFile(file, document);
+      }
     }
   }
 
